@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Gym Management System</h1>
+    <p class="lead">Welcome to the Gym Management System</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">👥 Members</h5>
+                <p class="card-text">Manage gym members and their information</p>
+                <a asp-controller="Members" asp-action="Index" class="btn btn-primary">View Members</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">💳 Memberships</h5>
+                <p class="card-text">Manage membership plans and pricing</p>
+                <a asp-controller="Memberships" asp-action="Index" class="btn btn-primary">View Plans</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">🏋️ Trainers</h5>
+                <p class="card-text">Manage trainers and their specialties</p>
+                <a asp-controller="Trainers" asp-action="Index" class="btn btn-primary">View Trainers</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">📅 Classes</h5>
+                <p class="card-text">Manage gym classes and schedules</p>
+                <a asp-controller="Classes" asp-action="Index" class="btn btn-primary">View Classes</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body text-center">
+                <h5 class="card-title">✅ Enrollments</h5>
+                <p class="card-text">Manage member enrollments in classes</p>
+                <a asp-controller="Enrollments" asp-action="Index" class="btn btn-primary">View Enrollments</a>
+            </div>
+        </div>
+    </div>
+</div>
+

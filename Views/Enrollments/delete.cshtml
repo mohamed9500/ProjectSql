@@ -1,0 +1,32 @@
+﻿@model GymManagementSystem.Models.Enrollment
+
+@{
+    ViewData["Title"] = "Remove Enrollment";
+}
+
+<h2>Remove Enrollment</h2>
+
+<div class="alert alert-warning">
+    <h4>Are you sure you want to remove this enrollment?</h4>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Member</dt>
+            <dd class="col-sm-9">@Model.Member.First_name @Model.Member.Last_name</dd>
+
+            <dt class="col-sm-3">Class</dt>
+            <dd class="col-sm-9">@Model.Class.ClassName</dd>
+
+            <dt class="col-sm-3">Enrolled On</dt>
+            <dd class="col-sm-9">@Model.EnrolledOn.ToString("dd/MM/yyyy")</dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post" class="mt-3">
+    <input type="hidden" asp-for="EnrollmentID" />
+    <button type="submit" class="btn btn-danger">Confirm Removal</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

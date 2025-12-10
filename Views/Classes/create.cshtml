@@ -1,0 +1,39 @@
+﻿@model GymManagementSystem.Models.Class
+
+@{
+    ViewData["Title"] = "Create Class";
+}
+
+<h2>Create Class</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="ClassName"></label>
+        <input asp-for="ClassName" class="form-control" placeholder="e.g., Morning Yoga, CrossFit 101" />
+        <span asp-validation-for="ClassName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="TrainerID">Trainer</label>
+        <select asp-for="TrainerID" class="form-control" asp-items="ViewBag.Trainers">
+            <option value="">-- Select Trainer --</option>
+        </select>
+        <span asp-validation-for="TrainerID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Schedule"></label>
+        <input asp-for="Schedule" class="form-control" placeholder="e.g., Mon/Wed/Fri 6:00 PM" />
+        <span asp-validation-for="Schedule" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-success">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
