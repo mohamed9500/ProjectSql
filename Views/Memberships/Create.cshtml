@@ -1,0 +1,71 @@
+@model GymManagementSystem.Models.Membership
+
+@{
+    ViewData["Title"] = "Create Membership Plan";
+}
+
+<h2>Create Membership Plan</h2>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="form-label">Plan Name</label>
+                <input asp-for="Name" class="form-control" placeholder="e.g., Basic, Premium, Gold" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Price" class="form-label">Price</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input asp-for="Price" class="form-control" type="number" step="0.01" placeholder="0.00" />
+                </div>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="DurationMonths" class="form-label">Duration (Months)</label>
+                <input asp-for="DurationMonths" class="form-control" type="number" min="1" placeholder="e.g., 1, 3, 6, 12" />
+                <span asp-validation-for="DurationMonths" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-success">
+                    <i class="bi bi-check-circle"></i> Create Plan
+                </button>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5>Membership Plan Guide</h5>
+            </div>
+            <div class="card-body">
+                <h6>Common Plans:</h6>
+                <ul>
+                    <li><strong>Basic:</strong> 1 month, $29.99</li>
+                    <li><strong>Standard:</strong> 3 months, $79.99</li>
+                    <li><strong>Premium:</strong> 6 months, $149.99</li>
+                    <li><strong>Gold:</strong> 12 months, $249.99</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

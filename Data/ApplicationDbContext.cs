@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using GymManagementSystem.Models;
-using GymManagementSystem.Models;
-using GymManagementSystem.Models;
 
 namespace GymManagementSystem.Data
 {

@@ -23,10 +23,27 @@ namespace GymManagementSystem.Controllers
             return View(members);
         }
 
+        // GET: Members/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var member = await _context.Members
+                .Include(m => m.Membership)
+                .Include(m => m.Enrollments)
+                    .ThenInclude(e => e.Class)
+                        .ThenInclude(c => c.Trainer)
+                .FirstOrDefaultAsync(m => m.MemberID == id);
+
+            if (member == null) return NotFound();
+
+            return View(member);
+        }
+
         // GET: Members/Create
         public IActionResult Create()
         {
-            ViewBag.Memberships = _context.Memberships.ToList();
+            ViewBag.Memberships = _context.Memberships.ToList() ?? new List<Membership>();
             return View();
         }
 
@@ -42,7 +59,7 @@ namespace GymManagementSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Memberships = _context.Memberships.ToList();
+            ViewBag.Memberships = _context.Memberships.ToList() ?? new List<Membership>();
             return View(member);
         }
 
@@ -54,7 +71,7 @@ namespace GymManagementSystem.Controllers
             var member = await _context.Members.FindAsync(id);
             if (member == null) return NotFound();
 
-            ViewBag.Memberships = _context.Memberships.ToList();
+            ViewBag.Memberships = _context.Memberships.ToList() ?? new List<Membership>();
             return View(member);
         }
 
@@ -81,7 +98,7 @@ namespace GymManagementSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Memberships = _context.Memberships.ToList();
+            ViewBag.Memberships = _context.Memberships.ToList() ?? new List<Membership>();
             return View(member);
         }
 
@@ -104,11 +121,23 @@ namespace GymManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var member = await _context.Members.FindAsync(id);
+            var member = await _context.Members
+                .Include(m => m.Enrollments)
+                .FirstOrDefaultAsync(m => m.MemberID == id);
+            
             if (member != null)
             {
-                _context.Members.Remove(member);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Members.Remove(member);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Member deleted successfully!";
+                }
+                catch (DbUpdateException)
+                {
+                    TempData["Error"] = "Cannot delete member. There may be related records.";
+                    return RedirectToAction(nameof(Delete), new { id });
+                }
             }
             return RedirectToAction(nameof(Index));
         }

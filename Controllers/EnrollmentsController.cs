@@ -43,7 +43,7 @@ namespace GymManagementSystem.Controllers
             ViewBag.Members = new SelectList(members, "MemberID", "FullName");
 
             // إنشاء قائمة الفصول
-            ViewBag.Classes = new SelectList(_context.Classes, "ClassID", "Title");
+            ViewBag.Classes = new SelectList(_context.Classes, "ClassID", "ClassName");
 
             return View();
         }

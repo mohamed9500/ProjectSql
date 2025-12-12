@@ -1,4 +1,4 @@
-namespace ProjectSql.Models
+namespace GymManagementSystem.Models
 {
     public class ErrorViewModel
     {

@@ -113,12 +113,29 @@ namespace GymManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var trainer = await _context.Trainers.FindAsync(id);
+            var trainer = await _context.Trainers
+                .Include(t => t.Classes)
+                .FirstOrDefaultAsync(t => t.TrainerID == id);
+            
             if (trainer != null)
             {
-                _context.Trainers.Remove(trainer);
-                await _context.SaveChangesAsync();
-                TempData["Success"] = "Trainer deleted successfully!";
+                if (trainer.Classes != null && trainer.Classes.Any())
+                {
+                    TempData["Error"] = "Cannot delete trainer. This trainer has assigned classes. Please reassign or delete the classes first.";
+                    return RedirectToAction(nameof(Delete), new { id });
+                }
+
+                try
+                {
+                    _context.Trainers.Remove(trainer);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Trainer deleted successfully!";
+                }
+                catch (DbUpdateException ex)
+                {
+                    TempData["Error"] = "Cannot delete trainer. There may be related records.";
+                    return RedirectToAction(nameof(Delete), new { id });
+                }
             }
             return RedirectToAction(nameof(Index));
         }
