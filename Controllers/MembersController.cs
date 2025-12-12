@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymManagementSystem.Data;
 using GymManagementSystem.Models;
@@ -41,9 +42,10 @@ namespace GymManagementSystem.Controllers
         }
 
         // GET: Members/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Memberships = _context.Memberships.ToList() ?? new List<Membership>();
+            var memberships = await _context.Memberships.ToListAsync();
+            ViewBag.Memberships = new SelectList(memberships, "MembershipID", "Name");
             return View();
         }
 
@@ -59,7 +61,8 @@ namespace GymManagementSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Memberships = _context.Memberships.ToList() ?? new List<Membership>();
+            var membershipsList = await _context.Memberships.ToListAsync();
+            ViewBag.Memberships = new SelectList(membershipsList, "MembershipID", "Name", member.MembershipID);
             return View(member);
         }
 
@@ -71,7 +74,8 @@ namespace GymManagementSystem.Controllers
             var member = await _context.Members.FindAsync(id);
             if (member == null) return NotFound();
 
-            ViewBag.Memberships = _context.Memberships.ToList() ?? new List<Membership>();
+            var memberships = await _context.Memberships.ToListAsync();
+            ViewBag.Memberships = new SelectList(memberships, "MembershipID", "Name", member.MembershipID);
             return View(member);
         }
 
@@ -98,7 +102,8 @@ namespace GymManagementSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Memberships = _context.Memberships.ToList() ?? new List<Membership>();
+            var membershipsEdit = await _context.Memberships.ToListAsync();
+            ViewBag.Memberships = new SelectList(membershipsEdit, "MembershipID", "Name", member.MembershipID);
             return View(member);
         }
 

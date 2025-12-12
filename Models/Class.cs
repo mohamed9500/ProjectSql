@@ -10,7 +10,7 @@ namespace GymManagementSystem.Models
 
         [Required]
         [StringLength(100)]
-        public string? ClassName { get; set; }
+        public string ClassName { get; set; } = string.Empty;
 
         [Required]
         public DateTime Schedule { get; set; }
@@ -20,6 +20,6 @@ namespace GymManagementSystem.Models
 
         // Navigation properties
         public Trainer? Trainer { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; }
+        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     }
 }

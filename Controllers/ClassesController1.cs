@@ -41,12 +41,18 @@ namespace GymManagementSystem.Controllers
         }
 
         // GET: Classes/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var trainers = _context.Trainers.ToList();
-            ViewBag.Trainers = trainers.Any() 
-                ? new SelectList(trainers, "TrainerID", "First_name") 
-                : new SelectList(new List<Trainer>(), "TrainerID", "First_name");
+            var trainers = await _context.Trainers.ToListAsync();
+            // Create a list with FullName for display
+            var trainerList = trainers.Select(t => new { 
+                t.TrainerID, 
+                FullName = t.First_name + " " + t.Last_name 
+            }).ToList();
+            ViewBag.Trainers = trainerList.Any() 
+                ? new SelectList(trainerList, "TrainerID", "FullName") 
+                : new SelectList(new List<object>(), "TrainerID", "FullName");
+            
             return View();
         }
 
@@ -61,10 +67,14 @@ namespace GymManagementSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            var trainersList = _context.Trainers.ToList();
-            ViewBag.Trainers = trainersList.Any() 
-                ? new SelectList(trainersList, "TrainerID", "First_name", @class.TrainerID) 
-                : new SelectList(new List<Trainer>(), "TrainerID", "First_name");
+            var trainersList = await _context.Trainers.ToListAsync();
+            var trainerList = trainersList.Select(t => new { 
+                t.TrainerID, 
+                FullName = t.First_name + " " + t.Last_name 
+            }).ToList();
+            ViewBag.Trainers = trainerList.Any() 
+                ? new SelectList(trainerList, "TrainerID", "FullName", @class.TrainerID) 
+                : new SelectList(new List<object>(), "TrainerID", "FullName");
             return View(@class);
         }
 
@@ -76,10 +86,14 @@ namespace GymManagementSystem.Controllers
             var @class = await _context.Classes.FindAsync(id);
             if (@class == null) return NotFound();
 
-            var trainers = _context.Trainers.ToList();
-            ViewBag.Trainers = trainers.Any() 
-                ? new SelectList(trainers, "TrainerID", "First_name", @class.TrainerID) 
-                : new SelectList(new List<Trainer>(), "TrainerID", "First_name");
+            var trainers = await _context.Trainers.ToListAsync();
+            var trainerList = trainers.Select(t => new { 
+                t.TrainerID, 
+                FullName = t.First_name + " " + t.Last_name 
+            }).ToList();
+            ViewBag.Trainers = trainerList.Any() 
+                ? new SelectList(trainerList, "TrainerID", "FullName", @class.TrainerID) 
+                : new SelectList(new List<object>(), "TrainerID", "FullName");
             return View(@class);
         }
 
@@ -106,10 +120,14 @@ namespace GymManagementSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            var trainers = _context.Trainers.ToList();
-            ViewBag.Trainers = trainers.Any() 
-                ? new SelectList(trainers, "TrainerID", "First_name", @class.TrainerID) 
-                : new SelectList(new List<Trainer>(), "TrainerID", "First_name");
+            var trainers = await _context.Trainers.ToListAsync();
+            var trainerList = trainers.Select(t => new { 
+                t.TrainerID, 
+                FullName = t.First_name + " " + t.Last_name 
+            }).ToList();
+            ViewBag.Trainers = trainerList.Any() 
+                ? new SelectList(trainerList, "TrainerID", "FullName", @class.TrainerID) 
+                : new SelectList(new List<object>(), "TrainerID", "FullName");
             return View(@class);
         }
 

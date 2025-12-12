@@ -10,21 +10,21 @@ namespace GymManagementSystem.Models
 
         [Required]
         [StringLength(50)]
-        public string? First_name { get; set; }
+        public string First_name { get; set; } = string.Empty;
 
         [Required]
         [StringLength(50)]
-        public string? Last_name { get; set; }
+        public string Last_name { get; set; } = string.Empty;
 
         [Required]
         [Phone]
-        public string? Phone { get; set; }
+        public string Phone { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100)]
-        public string? Specialty { get; set; }
+        public string Specialty { get; set; } = string.Empty;
 
         // Navigation Property
-        public ICollection<Class> Classes { get; set; }
+        public ICollection<Class> Classes { get; set; } = new List<Class>();
     }
 }

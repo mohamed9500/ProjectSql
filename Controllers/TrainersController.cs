@@ -131,7 +131,7 @@ namespace GymManagementSystem.Controllers
                     await _context.SaveChangesAsync();
                     TempData["Success"] = "Trainer deleted successfully!";
                 }
-                catch (DbUpdateException ex)
+                catch (DbUpdateException)
                 {
                     TempData["Error"] = "Cannot delete trainer. There may be related records.";
                     return RedirectToAction(nameof(Delete), new { id });
