@@ -24,10 +24,35 @@ namespace GymManagementSystem.Controllers
             return View(classes);
         }
 
-        // GET: Classes/Create
-        public IActionResult Create()
+        // GET: Classes/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
-            ViewBag.Trainers = new SelectList(_context.Trainers, "TrainerID", "First_name");
+            if (id == null) return NotFound();
+
+            var @class = await _context.Classes
+                .Include(c => c.Trainer)
+                .Include(c => c.Enrollments)
+                    .ThenInclude(e => e.Member)
+                .FirstOrDefaultAsync(m => m.ClassID == id);
+
+            if (@class == null) return NotFound();
+
+            return View(@class);
+        }
+
+        // GET: Classes/Create
+        public async Task<IActionResult> Create()
+        {
+            var trainers = await _context.Trainers.ToListAsync();
+            // Create a list with FullName for display
+            var trainerList = trainers.Select(t => new { 
+                t.TrainerID, 
+                FullName = t.First_name + " " + t.Last_name 
+            }).ToList();
+            ViewBag.Trainers = trainerList.Any() 
+                ? new SelectList(trainerList, "TrainerID", "FullName") 
+                : new SelectList(new List<object>(), "TrainerID", "FullName");
+            
             return View();
         }
 
@@ -42,7 +67,14 @@ namespace GymManagementSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Trainers = new SelectList(_context.Trainers, "TrainerID", "First_name", @class.TrainerID);
+            var trainersList = await _context.Trainers.ToListAsync();
+            var trainerList = trainersList.Select(t => new { 
+                t.TrainerID, 
+                FullName = t.First_name + " " + t.Last_name 
+            }).ToList();
+            ViewBag.Trainers = trainerList.Any() 
+                ? new SelectList(trainerList, "TrainerID", "FullName", @class.TrainerID) 
+                : new SelectList(new List<object>(), "TrainerID", "FullName");
             return View(@class);
         }
 
@@ -54,7 +86,14 @@ namespace GymManagementSystem.Controllers
             var @class = await _context.Classes.FindAsync(id);
             if (@class == null) return NotFound();
 
-            ViewBag.Trainers = new SelectList(_context.Trainers, "TrainerID", "First_name", @class.TrainerID);
+            var trainers = await _context.Trainers.ToListAsync();
+            var trainerList = trainers.Select(t => new { 
+                t.TrainerID, 
+                FullName = t.First_name + " " + t.Last_name 
+            }).ToList();
+            ViewBag.Trainers = trainerList.Any() 
+                ? new SelectList(trainerList, "TrainerID", "FullName", @class.TrainerID) 
+                : new SelectList(new List<object>(), "TrainerID", "FullName");
             return View(@class);
         }
 
@@ -81,7 +120,14 @@ namespace GymManagementSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Trainers = new SelectList(_context.Trainers, "TrainerID", "First_name", @class.TrainerID);
+            var trainers = await _context.Trainers.ToListAsync();
+            var trainerList = trainers.Select(t => new { 
+                t.TrainerID, 
+                FullName = t.First_name + " " + t.Last_name 
+            }).ToList();
+            ViewBag.Trainers = trainerList.Any() 
+                ? new SelectList(trainerList, "TrainerID", "FullName", @class.TrainerID) 
+                : new SelectList(new List<object>(), "TrainerID", "FullName");
             return View(@class);
         }
 
@@ -104,11 +150,23 @@ namespace GymManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @class = await _context.Classes.FindAsync(id);
+            var @class = await _context.Classes
+                .Include(c => c.Enrollments)
+                .FirstOrDefaultAsync(c => c.ClassID == id);
+            
             if (@class != null)
             {
-                _context.Classes.Remove(@class);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Classes.Remove(@class);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Class deleted successfully!";
+                }
+                catch (DbUpdateException)
+                {
+                    TempData["Error"] = "Cannot delete class. There may be related records.";
+                    return RedirectToAction(nameof(Delete), new { id });
+                }
             }
             return RedirectToAction(nameof(Index));
         }

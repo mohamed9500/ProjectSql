@@ -1,0 +1,69 @@
+@model IEnumerable<GymManagementSystem.Models.Membership>
+
+@{
+    ViewData["Title"] = "Membership Plans";
+}
+
+<h2>Membership Plans</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> Add New Plan
+    </a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Plan Name</th>
+            <th>Price</th>
+            <th>Duration (Months)</th>
+            <th>Members Count</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.MembershipID</td>
+                <td>@item.Name</td>
+                <td>$@item.Price.ToString("F2")</td>
+                <td>@item.DurationMonths</td>
+                <td>
+                    <span class="badge bg-info">@(item.Members?.Count ?? 0)</span>
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.MembershipID" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@item.MembershipID" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.MembershipID" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        <strong>No membership plans found!</strong> Click "Add New Plan" to get started.
+    </div>
+}
+

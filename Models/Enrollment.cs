@@ -18,6 +18,6 @@ namespace GymManagementSystem.Models
 
         // Navigation Properties
         public Member? Member { get; set; }
-        public Class Class { get; set; }
+        public Class? Class { get; set; }
     }
 }

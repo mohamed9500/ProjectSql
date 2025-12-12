@@ -10,19 +10,19 @@ namespace GymManagementSystem.Models
 
         [Required]
         [StringLength(50)]
-        public string First_name { get; set; }
+        public string First_name { get; set; } = string.Empty;
 
         [Required]
         [StringLength(50)]
-        public string Last_name { get; set; }
+        public string Last_name { get; set; } = string.Empty;
 
         [Required]
         [Phone]
-        public string Phone { get; set; }
+        public string Phone { get; set; } = string.Empty;
 
         [Required]
         [EmailAddress]
-        public string Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         [Required]
         public DateTime JoinDate { get; set; }
@@ -30,8 +30,8 @@ namespace GymManagementSystem.Models
         public int? MembershipID { get; set; }
 
         // Navigation Properties
-        public Membership Membership { get; set; }
-        public ICollection<Enrollment> Enrollments { get; set; }
+        public Membership? Membership { get; set; }
+        public ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
     }
 }
 

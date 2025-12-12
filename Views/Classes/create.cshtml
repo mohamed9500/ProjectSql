@@ -23,7 +23,7 @@
 
     <div class="form-group">
         <label asp-for="Schedule"></label>
-        <input asp-for="Schedule" class="form-control" placeholder="e.g., Mon/Wed/Fri 6:00 PM" />
+        <input asp-for="Schedule" class="form-control" type="datetime-local" />
         <span asp-validation-for="Schedule" class="text-danger"></span>
     </div>
 

@@ -29,21 +29,22 @@ namespace GymManagementSystem.Controllers
         }
 
         // GET: Enrollments/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             // إنشاء قائمة الأعضاء مع عرض الاسم الكامل
-            var members = _context.Members
+            var members = await _context.Members
                 .Select(m => new
                 {
                     m.MemberID,
                     FullName = m.First_name + " " + m.Last_name
                 })
-                .ToList();
+                .ToListAsync();
 
             ViewBag.Members = new SelectList(members, "MemberID", "FullName");
 
             // إنشاء قائمة الفصول
-            ViewBag.Classes = new SelectList(_context.Classes, "ClassID", "Title");
+            var classes = await _context.Classes.ToListAsync();
+            ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName");
 
             return View();
         }
@@ -64,16 +65,17 @@ namespace GymManagementSystem.Controllers
                 {
                     ModelState.AddModelError("", "This member is already enrolled in this class!");
 
-                    var members = _context.Members
+                    var members = await _context.Members
                         .Select(m => new
                         {
                             m.MemberID,
                             FullName = m.First_name + " " + m.Last_name
                         })
-                        .ToList();
+                        .ToListAsync();
 
+                    var classes = await _context.Classes.ToListAsync();
                     ViewBag.Members = new SelectList(members, "MemberID", "FullName", enrollment.MemberID);
-                    ViewBag.Classes = new SelectList(_context.Classes, "ClassID", "Title", enrollment.ClassID);
+                    ViewBag.Classes = new SelectList(classes, "ClassID", "ClassName", enrollment.ClassID);
 
                     return View(enrollment);
                 }
@@ -89,16 +91,17 @@ namespace GymManagementSystem.Controllers
             }
 
             // في حالة وجود خطأ، إعادة تحميل القوائم
-            var membersList = _context.Members
+            var membersList = await _context.Members
                 .Select(m => new
                 {
                     m.MemberID,
                     FullName = m.First_name + " " + m.Last_name
                 })
-                .ToList();
+                .ToListAsync();
 
+            var classesList = await _context.Classes.ToListAsync();
             ViewBag.Members = new SelectList(membersList, "MemberID", "FullName", enrollment.MemberID);
-            ViewBag.Classes = new SelectList(_context.Classes, "ClassID", "Title", enrollment.ClassID);
+            ViewBag.Classes = new SelectList(classesList, "ClassID", "ClassName", enrollment.ClassID);
 
             return View(enrollment);
         }

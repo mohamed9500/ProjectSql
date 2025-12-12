@@ -1,4 +1,4 @@
-﻿@model IEnumerable<GymManagementSystem.Models.Trainer>
+@model IEnumerable<GymManagementSystem.Models.Trainer>
 
 @{
     ViewData["Title"] = "Trainers List";
@@ -10,6 +10,14 @@
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 }
@@ -56,3 +64,4 @@
         <strong>No trainers found!</strong> Click "Add New Trainer" to get started.
     </div>
 }
+

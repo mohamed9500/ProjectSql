@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GymManagementSystem.Data;
 using GymManagementSystem.Models;
@@ -23,10 +24,28 @@ namespace GymManagementSystem.Controllers
             return View(members);
         }
 
-        // GET: Members/Create
-        public IActionResult Create()
+        // GET: Members/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
-            ViewBag.Memberships = _context.Memberships.ToList();
+            if (id == null) return NotFound();
+
+            var member = await _context.Members
+                .Include(m => m.Membership)
+                .Include(m => m.Enrollments)
+                    .ThenInclude(e => e.Class)
+                        .ThenInclude(c => c.Trainer)
+                .FirstOrDefaultAsync(m => m.MemberID == id);
+
+            if (member == null) return NotFound();
+
+            return View(member);
+        }
+
+        // GET: Members/Create
+        public async Task<IActionResult> Create()
+        {
+            var memberships = await _context.Memberships.ToListAsync();
+            ViewBag.Memberships = new SelectList(memberships, "MembershipID", "Name");
             return View();
         }
 
@@ -42,7 +61,8 @@ namespace GymManagementSystem.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Memberships = _context.Memberships.ToList();
+            var membershipsList = await _context.Memberships.ToListAsync();
+            ViewBag.Memberships = new SelectList(membershipsList, "MembershipID", "Name", member.MembershipID);
             return View(member);
         }
 
@@ -54,7 +74,8 @@ namespace GymManagementSystem.Controllers
             var member = await _context.Members.FindAsync(id);
             if (member == null) return NotFound();
 
-            ViewBag.Memberships = _context.Memberships.ToList();
+            var memberships = await _context.Memberships.ToListAsync();
+            ViewBag.Memberships = new SelectList(memberships, "MembershipID", "Name", member.MembershipID);
             return View(member);
         }
 
@@ -81,7 +102,8 @@ namespace GymManagementSystem.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewBag.Memberships = _context.Memberships.ToList();
+            var membershipsEdit = await _context.Memberships.ToListAsync();
+            ViewBag.Memberships = new SelectList(membershipsEdit, "MembershipID", "Name", member.MembershipID);
             return View(member);
         }
 
@@ -104,11 +126,23 @@ namespace GymManagementSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var member = await _context.Members.FindAsync(id);
+            var member = await _context.Members
+                .Include(m => m.Enrollments)
+                .FirstOrDefaultAsync(m => m.MemberID == id);
+            
             if (member != null)
             {
-                _context.Members.Remove(member);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    _context.Members.Remove(member);
+                    await _context.SaveChangesAsync();
+                    TempData["Success"] = "Member deleted successfully!";
+                }
+                catch (DbUpdateException)
+                {
+                    TempData["Error"] = "Cannot delete member. There may be related records.";
+                    return RedirectToAction(nameof(Delete), new { id });
+                }
             }
             return RedirectToAction(nameof(Index));
         }

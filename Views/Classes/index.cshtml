@@ -30,6 +30,7 @@
 
                 <td>@item.Schedule</td>
                 <td>
+                    <a asp-action="Details" asp-route-id="@item.ClassID" class="btn btn-sm btn-info">Details</a>
                     <a asp-action="Edit" asp-route-id="@item.ClassID" class="btn btn-sm btn-warning">Edit</a>
                     <a asp-action="Delete" asp-route-id="@item.ClassID" class="btn btn-sm btn-danger">Delete</a>
                 </td>
