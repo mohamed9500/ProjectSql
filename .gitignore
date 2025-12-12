@@ -1,0 +1,133 @@
+###########################
+## General Ignore Rules
+###########################
+
+# General temporary files
+*~
+*.bak
+*.tmp
+*.log
+*.DS_Store
+*.swp
+
+###########################
+## Build Results (Always Ignore)
+###########################
+
+# Binaries and intermediate results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Log files and build reports
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+msbuild.log
+msbuild.err
+msbuild.wrn
+*.trx
+
+# Compiler generated files
+*.obj
+*.pdb
+*.ilk
+*.suo
+*.ipdb
+*.i[pf]db
+
+###########################
+## Visual Studio / IDE Files
+###########################
+
+# User-specific files
+*.user
+*.userosscache
+*.sln.docstates
+*.suo
+*.rsuser
+
+# Visual Studio 2017+ cache/options directory
+.vs/
+
+# Visual Studio Code cache/options directory
+.vscode/
+
+# JetBrains Rider/ReSharper
+.idea/
+*.ReSharperManagedFile
+*.resharper
+
+# NCrunch
+# The folder ncrunch contains all of the files used by NCrunch as part of its continuous testing.
+# If you don't use NCrunch, this is harmless, but if you do, ignore it.
+**/.ncrunch/
+
+# Visual Studio Code workspace files
+*.code-workspace
+
+###########################
+## NuGet Packages & Tools
+###########################
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+
+# The packages folder (used in older .NET Framework projects)
+**/packages/*
+
+# Exclude packages/build/ which is used for MSBuild targets
+!**/packages/build/
+
+# Paket dependency manager
+.paket/
+paket-files/
+
+###########################
+## Source Control (If using SVN or TFS with VS)
+###########################
+
+# Git/TFS files
+*.vssscc
+*.vsscc
+*.scc
+.tfignore
+
+###########################
+## Windows & Other OS Files
+###########################
+
+# Windows files
+Thumbs.db
+Desktop.ini
+
+# Linux/Mac files
+.DS_Store
+
+###########################
+## Web/Front-end (If applicable)
+###########################
+
+# Common front-end package manager folders
+**/node_modules/
+
+# Common build output folders
+[Ww]wwroot/dist/
+
+###########################
+## Sensitive/Local Configuration
+###########################
+
+# Ignore local run/launch settings (may contain machine-specific paths)
+**/launchSettings.json
+
+# Ignore local/development app settings (may contain secrets/dev connection strings)
+*appsettings.Development.json
+*appsettings.Local.json
